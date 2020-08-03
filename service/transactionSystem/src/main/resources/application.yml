@@ -1,0 +1,8 @@
+spring:
+  application.name: transcationSystem
+server:
+  port: 8095
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/

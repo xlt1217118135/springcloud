@@ -1,0 +1,8 @@
+spring:
+  application.name: businessSystem
+server:
+  port: 8092
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/

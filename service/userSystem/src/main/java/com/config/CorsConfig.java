@@ -11,7 +11,6 @@ import javax.servlet.annotation.WebFilter;
  * Date 2020/7/27 11:04
  * 跨域请求设置
  */
-@Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
     @Override

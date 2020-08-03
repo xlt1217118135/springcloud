@@ -6,6 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="businessSystem" />
+        <module name="cloudService" />
+        <module name="consumerSystem" />
+        <module name="gatewaySystem" />
+        <module name="orderSystem" />
+        <module name="transactionSystem" />
         <module name="userSystem" />
       </profile>
     </annotationProcessing>

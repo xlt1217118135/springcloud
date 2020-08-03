@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: zuul
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 200
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    timeout: 0ms
+
+server:
+  port: 8091 #指定端口名
+# 配置Eureka地址
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/
+
+
+ribbon:
+  ###指的是建立连接所用的时间，适用于网络状况正常的情况下，两端连接所用的时间。
+  ReadTimeout: 15000
+  ###指的是建立连接后从服务器读取到可用资源所用的时间。
+  ConnectTimeout: 15000
+
+# 构建路由地址
+zuul:
+  routes:
+    # 这里可以自定义
+    service-1:
+      # 匹配的路由规则
+      path: /api/userSystem/**
+      # 路由的目标服务名
+      serviceId: userSystem
+    service-2:
+      # 匹配的路由规则
+      path: /api/businessSystem/**
+      # 路由的目标服务名
+      serviceId: businessSystem
+    service-3:
+      # 匹配的路由规则
+      path: /api/consumerSystem/**
+      # 路由的目标服务名
+      serviceId: consumerSystem
+    service-4:
+      # 匹配的路由规则
+      path: /api/transcationSystem/**
+      # 路由的目标服务名
+      serviceId: transcationSystem
+    service-5:
+      # 匹配的路由规则
+      path: /api/orderSystem/**
+      # 路由的目标服务名
+      serviceId: orderSystem
+  host:
+    connect-timeout-millis: 15000 #HTTP连接超时要比Hystrix的大
+    socket-timeout-millis: 20000   #socket超时

@@ -1,10 +1,12 @@
 package com.core.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by lenovo
  * Date 2020/7/27 12:00
  */
-public class User {
+public class User implements Serializable {
 
     private long userId;
 

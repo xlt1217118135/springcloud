@@ -1,20 +1,17 @@
 package com.core.controller;
 
-import com.core.service.RedefinedUserDetailService;
-import com.util.JwtUtils;
+import com.core.entity.User;
+import com.redis.RedisTempletUtil;
+import com.util.CommonConstance;
+import com.util.HttpCodeAndMessage;
+import com.util.ResponseWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.annotation.Resource;
 
 /**
  * Created by lenovo
@@ -25,35 +22,56 @@ import javax.annotation.Resource;
 @Api
 public class LoginController {
 
-    @Resource
-    private AuthenticationManager authenticationManager;
-
-    @Resource
-    private RedefinedUserDetailService redefinedUserDetailService;
+    @Autowired
+    private RedisTempletUtil redisTempletUtil;
 
     @GetMapping("logining")
     @ResponseBody
     @ApiOperation("登陆")
-    public String logining(){
+    public ResponseWrapper logining(){
 
-        //不同的用户类型使用不同的登陆方式
-        String token = "";
-        UserDetails userDetails = null;
-        login(new UsernamePasswordAuthenticationToken("111", "222"));
-        userDetails = redefinedUserDetailService.loadUserByUsername("111");
-        token = JwtUtils.createToken("111", "222");
+        ResponseWrapper responseWrapper = new ResponseWrapper();
 
-        return token;
+//        //不同的用户类型使用不同的登陆方式
+//        String token = "";
+//        UserDetails userDetails = null;
+//        login(new UsernamePasswordAuthenticationToken("111", "222"));
+//        userDetails = redefinedUserDetailService.loadUserByUsername("111");
+//        token = JwtUtils.createToken("111", "222");
+        try{
+            User user = new User();
+            Thread.sleep(5500);
+            Long key = 111111L;
+            user.setUserId(key);
+            user.setUserName("用户1");
+
+            redisTempletUtil.setDataForExpire(key.toString(), user, CommonConstance.REDIS_EXPIRE_TIME);
+
+            responseWrapper.setStatus(true);
+            responseWrapper.setCode(HttpCodeAndMessage.OK.getCode());
+            responseWrapper.setMessage(HttpCodeAndMessage.OK.getMessage());
+        }catch( Exception e){
+            e.printStackTrace();
+        }
+
+
+        return responseWrapper;
     }
 
-    /**
-     * 校验账号密码并进行登陆
-     * @param upToken
-     */
-    private void login(UsernamePasswordAuthenticationToken upToken){
-        //验证
-        Authentication authentication = authenticationManager.authenticate(upToken);
-        //将用户信息保存到SecurityContextHolder=登陆
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    @GetMapping("loginOut")
+    @ResponseBody
+    public ResponseWrapper loginOut(){
+
+        String key = "111";
+        redisTempletUtil.deleteData(key);
+
+        ResponseWrapper responseWrapper = new ResponseWrapper();
+
+        responseWrapper.setStatus(true);
+        responseWrapper.setCode(HttpCodeAndMessage.OK.getCode());
+        responseWrapper.setMessage(HttpCodeAndMessage.OK.getMessage());
+
+        return responseWrapper;
+
     }
 }
